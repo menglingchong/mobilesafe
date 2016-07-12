@@ -3,12 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
 
-    <TextView 
+    <!--
+         layout_gravity:设置控件在父控件中的位置
+    	 gravity:设置控件的内容在该控件中的位置
+    	 
+    	 layout_marginTop:设置控件距离某控件的位置
+    	 paddingTop:设置距离控件内边框的距离 	 
+    -->
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="这是主界面"
-        android:textSize="30sp"
+        android:background="#8866ff00"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="功能列表"
+        android:textSize="25sp" />
+
+    <!-- singleLine:一行显示
+	     ellipsize:(省略)
+			 none:省略后面的文字
+			 start:省略前面的文字
+			 middle:省略中间的文字
+			 end:省略后面的文字
+			 marquee:滚动
+		 focusableInTouchMode:获取触摸的焦点
+		 falseable:是否获取焦点操作，true：可以	false:不可以.   TextView没有点击事件和获取焦点的事件
+		 marqueeRepeatLimit:设置滚动次数，marquee_forever：-1永远滚动
+     -->
+    <com.heima.mobilesafe.ui.HomeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="手机安全卫士！牛逼！安全高效，杀毒厉害，云端计算，大神召唤！打开7次可以召唤神龙!"
+        android:textSize="20sp"
+		android:singleLine="true"
+		android:ellipsize="marquee"
+		android:focusableInTouchMode="true"
+		android:marqueeRepeatLimit="marquee_forever"
         />
+    <!-- numColumns:设置每行显示的个数
+    	 verticalSpacing:设置每行之间的距离
+     -->
+    <GridView
+        android:id="@+id/gv_home_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:layout_marginTop="20dp"
+        >
+    </GridView>
+
 </LinearLayout>
