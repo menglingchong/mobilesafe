@@ -60,6 +60,7 @@ public class SpalshActivity extends Activity {
 				break;
 			case MSG_ENTER_HOME:
 				enterHome();
+				
 				break;
 			case MSG_SERVER_ERROR:
 				Toast.makeText(getApplicationContext(), "连接服务器失败", 0).show();
