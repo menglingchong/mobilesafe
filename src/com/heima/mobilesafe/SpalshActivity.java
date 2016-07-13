@@ -49,6 +49,7 @@ public class SpalshActivity extends Activity {
     private String code;
 	private String apkUrl;
 	private String des;
+	private SharedPreferences sp;
 	
 	private Handler handler = new Handler(){
 
@@ -83,8 +84,7 @@ public class SpalshActivity extends Activity {
 			}
 		};
 	};
-	private SharedPreferences sp;
-	
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +93,7 @@ public class SpalshActivity extends Activity {
         tv_spalsh_load = (TextView) findViewById(R.id.tv_spalsh_load);
         tv_spalsh_versionname.setText("版本号："+getVersionName());
         sp = getSharedPreferences("config", MODE_PRIVATE);
+        //屏蔽自动更新版本
         if (sp.getBoolean("update", true)) {
 			update();
 		} else {

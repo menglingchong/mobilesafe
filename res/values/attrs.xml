@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 自定义属性 -->
+<resources>
+    <declare-styleable name= "com.heima.mobilesafe.ui.SettingView">
+        <attr name="title" format="string"/> <!-- name:属性的名称，format:属性的类型 -->
+        <attr name="des_on" format="string"/>
+        <attr name="des_off" format="string"/>
+    </declare-styleable>
+
+</resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:heima="http://schemas.android.com/apk/res/com.heima.mobilesafe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -59,12 +60,17 @@
     </RelativeLayout>
   -->
   <!-- 使用自定义组合控件的方式，优化布局文件，有利于扩展
-  
+  	      在自定义控件中定义自定义属性
+  	   match_parent：-1
+  	   wrap_content：-2
    -->
    <com.heima.mobilesafe.ui.SettingView
        android:id="@+id/sv_setting_update"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       heima:title="提示信息"
+       heima:des_on="打开提示更新"
+       heima:des_off="关闭提示更新"
        />
    
    
