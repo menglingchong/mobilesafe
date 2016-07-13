@@ -22,6 +22,7 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -82,6 +83,7 @@ public class SpalshActivity extends Activity {
 			}
 		};
 	};
+	private SharedPreferences sp;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +92,22 @@ public class SpalshActivity extends Activity {
         tv_spalsh_versionname = (TextView) findViewById(R.id.tv_spalsh_versionname);
         tv_spalsh_load = (TextView) findViewById(R.id.tv_spalsh_load);
         tv_spalsh_versionname.setText("版本号："+getVersionName());
+        sp = getSharedPreferences("config", MODE_PRIVATE);
+        if (sp.getBoolean("update", true)) {
+			update();
+		} else {
+			//跳转到主界面
+			//不能让主线程去睡眠2s,因为主线程有渲染界面的操作，主线程睡眠就没有办法进行渲染操作
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					SystemClock.sleep(2000);//睡眠2s
+					enterHome();
+				}
+			}).start();
+		}
         
-        update();
     }
 	/**
 	 * 弹出对话框

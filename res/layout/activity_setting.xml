@@ -13,11 +13,10 @@
         android:paddingTop="10dp"
         android:text="设置中心"
         android:textSize="25sp" />
-
+	<!--  第一种方式实现布局，这种方式不利于扩展
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        
          >
          <TextView 
              android:id="@+id/tv_setting_title"
@@ -58,5 +57,16 @@
              />
          
     </RelativeLayout>
-
+  -->
+  <!-- 使用自定义组合控件的方式，优化布局文件，有利于扩展
+  
+   -->
+   <com.heima.mobilesafe.ui.SettingView
+       android:id="@+id/sv_setting_update"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       />
+   
+   
+   
 </LinearLayout>
