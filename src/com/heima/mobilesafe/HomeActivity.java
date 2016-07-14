@@ -73,6 +73,7 @@ public class HomeActivity extends Activity {
 	/**
 	 * 输入密码对话框
 	 */
+	int count =0;
 	protected void showEnterPasswordDialog() {
 
 		AlertDialog.Builder builder = new Builder(this);
@@ -84,6 +85,22 @@ public class HomeActivity extends Activity {
 		final EditText et_enterpassword_password = (EditText) view.findViewById(R.id.et_enterpassword_password);
 		Button btn_ok = (Button) view.findViewById(R.id.btn_ok);
 		Button btn_cancle = (Button) view.findViewById(R.id.btn_cancle);
+		ImageView iv_enterpassword_hide = (ImageView) view.findViewById(R.id.iv_enterpassword_hide);
+		iv_enterpassword_hide.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// 隐藏显示密码
+				if (count %2==0) {
+					//隐藏密码
+					et_enterpassword_password.setInputType(129);//通过代码设置输入框的类型
+				} else {
+					//显示密码
+					et_enterpassword_password.setInputType(0);
+				}
+				count++;
+			}
+		});
 		btn_ok.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -98,7 +115,7 @@ public class HomeActivity extends Activity {
 				//3.将密码和sp中保存的密码进行判断
 				String sp_password = sp.getString("password", "");
 				if (MD5Util.passwordMD5(password).equals(sp_password)) {
-					//页面的跳转
+					//页面跳转到手机防盗页面
 					
 					//隐藏对话框
 					dialog.dismiss();
