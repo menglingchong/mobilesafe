@@ -1,5 +1,7 @@
 package com.heima.mobilesafe;
 
+import com.heima.mobilesafe.utils.MD5Util;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -95,7 +97,7 @@ public class HomeActivity extends Activity {
 				}
 				//3.将密码和sp中保存的密码进行判断
 				String sp_password = sp.getString("password", "");
-				if (sp_password.equals(password)) {
+				if (MD5Util.passwordMD5(password).equals(sp_password)) {
 					//页面的跳转
 					
 					//隐藏对话框
@@ -151,7 +153,7 @@ public class HomeActivity extends Activity {
 				//4.判断两次密码是否一致;密码一致就保存到sharedPreference
 				if (password.equals(confrim)) {
 					Editor edit = sp.edit();
-					edit.putString("password", password);
+					edit.putString("password", MD5Util.passwordMD5(password));
 					edit.commit();
 					//取消对话框
 					dialog.dismiss();
