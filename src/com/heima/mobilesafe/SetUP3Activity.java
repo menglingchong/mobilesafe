@@ -5,23 +5,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * 设置向导界面
- * 
- * @author lenovo
- * 
- */
-public class SetUP1Activity extends Activity {
+public class SetUP3Activity extends Activity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_setup1);
+		setContentView(R.layout.activity_setup3);
 	}
 	/**
-	 * 实现页面的跳转，跳转到第二个页面
+	 * 跳转到第4个界面
 	 * @param v
 	 */
 	public void next(View v){
+		Intent intent = new Intent(getApplicationContext(), SetUP4Activity.class);
+		startActivity(intent);
+	}
+	/**
+	 * 跳转到第2个界面
+	 * @param v
+	 */
+	public void pre(View v){
 		Intent intent = new Intent(getApplicationContext(), SetUP2Activity.class);
 		startActivity(intent);
 	}

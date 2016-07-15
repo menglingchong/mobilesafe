@@ -30,6 +30,9 @@
         <activity android:name=".SettingActivity"></activity>
         <activity android:name=".LostFindActivity"></activity>
         <activity android:name=".SetUP1Activity"></activity>
+        <activity android:name=".SetUP2Activity"></activity>
+        <activity android:name=".SetUP3Activity"></activity>
+        <activity android:name=".SetUP4Activity"></activity>
     </application>
 
 </manifest>
