@@ -33,6 +33,7 @@
         <activity android:name=".SetUP2Activity"></activity>
         <activity android:name=".SetUP3Activity"></activity>
         <activity android:name=".SetUP4Activity"></activity>
+        <activity android:name=".SetUPBaseActivity"></activity>
     </application>
 
 </manifest>
