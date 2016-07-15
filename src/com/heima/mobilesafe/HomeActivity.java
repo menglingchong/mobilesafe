@@ -116,7 +116,8 @@ public class HomeActivity extends Activity {
 				String sp_password = sp.getString("password", "");
 				if (MD5Util.passwordMD5(password).equals(sp_password)) {
 					//页面跳转到手机防盗页面
-					
+					Intent intent =new Intent(HomeActivity.this, LostFindActivity.class);
+					startActivity(intent);
 					//隐藏对话框
 					dialog.dismiss();
 					Toast.makeText(getApplicationContext(), "密码输入正确", 0).show();
