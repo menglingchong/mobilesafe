@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 用xml代码画shape图片 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+	   android:shape="rectangle"
+>
+    <!-- shape:设置图片的形状 	rectangle:矩形;oval:椭圆;line:线；ring:环形-->
+    <!--  corners:弧度-->
+	<corners android:radius="10dp"/>
+	<!-- solid:颜色 -->
+	<solid android:color="#ff0000"/>
+	<!-- stroke:虚线 -->
+	<!--  
+	<stroke android:width="3dp" android:color="#00ff00" android:dashWidth="5dp" android:dashGap="10dp"/>
+	-->
+	<!-- gradient:渐变   angle:角度的渐变-->
+	<gradient android:startColor="#00ff00" android:centerColor="#0000ff" android:endColor="#ff0000" />
+</shape>

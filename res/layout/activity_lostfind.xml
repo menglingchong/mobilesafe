@@ -21,4 +21,126 @@
         android:paddingTop="10dp"
         android:text="防盗中心"
         android:textSize="25sp" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安全号码"
+            android:layout_margin="5dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_lostfind_safenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="5556"
+            android:layout_margin="5dp"
+            android:textSize="20sp" />
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#66000000"
+            android:layout_below="@id/tv_lostfind_safenumber"
+            />
+        
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_lostfind_protected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="防盗保护是否开启"
+            android:layout_margin="5dp"
+            android:textSize="20sp" />
+
+       <ImageView 
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:src="@drawable/unlock"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="5dp"
+           />
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#66000000"
+            android:layout_below="@id/tv_lostfind_protected"
+            />
+        
+    </RelativeLayout>
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="重新进入设置向导"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:background="@drawable/shape_drawable_button"
+        android:onClick="resetup"
+        android:clickable="true"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tv_lostfind_protected"
+        android:background="#66000000" />
+	<TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="功能简介"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+        android:background="#66000000"
+        android:padding="5dp"
+        />
+	
+	 <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GPS追踪：#*location*#"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        />
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放报警音乐：#*alarm*#"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        />
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="远程删除数据：#*wipedata*#"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        />
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="远程锁屏:#*lockscreen*#"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        />    
 </LinearLayout>

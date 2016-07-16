@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 /**
  * 手机防盗界面
  * @author lenovo
@@ -30,5 +31,11 @@ public class LostFindActivity extends Activity {
 			//显示手机防盗界面
 			setContentView(R.layout.activity_lostfind);
 		}
+	}
+	
+	public void resetup(View v){
+		Intent intent = new Intent(getApplicationContext(), SetUP1Activity.class);
+		startActivity(intent);
+		finish();
 	}
 }
