@@ -20,6 +20,7 @@ public class SetUP2Activity extends SetUPBaseActivity {
 		Intent intent = new Intent(getApplicationContext(), SetUP3Activity.class);
 		startActivity(intent);
 		finish();
+		overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
 	}
 	/**
 	 * 跳转到第1个界面
@@ -30,5 +31,6 @@ public class SetUP2Activity extends SetUPBaseActivity {
 		Intent intent = new Intent(getApplicationContext(), SetUP1Activity.class);
 		startActivity(intent);
 		finish();
+		overridePendingTransition(R.anim.setup_enter_pre, R.anim.setup_exit_pre);
 	}
 }
