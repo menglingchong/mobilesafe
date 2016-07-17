@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,7 @@
         <activity android:name=".SetUP3Activity"></activity>
         <activity android:name=".SetUP4Activity"></activity>
         <activity android:name=".SetUPBaseActivity"></activity>
+        <activity android:name=".ContactActivity"></activity>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
                 android:priority="1000" >

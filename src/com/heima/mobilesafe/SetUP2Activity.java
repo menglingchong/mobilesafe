@@ -9,6 +9,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 public class SetUP2Activity extends SetUPBaseActivity {
 	private SettingView sv_setup2_sim;
@@ -56,10 +57,16 @@ public class SetUP2Activity extends SetUPBaseActivity {
 	 */
 	@Override
 	public void next_activity() {
-		Intent intent = new Intent(getApplicationContext(), SetUP3Activity.class);
-		startActivity(intent);
-		finish();
-		overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		//判断用户是否绑定SIM卡，如果绑定则进行跳转第三个界面的操作，没有绑定则必须进行绑定
+		if (sv_setup2_sim.isChecked()) {
+			//跳转到第三个界面
+			Intent intent = new Intent(getApplicationContext(), SetUP3Activity.class);
+			startActivity(intent);
+			finish();
+			overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		} else {
+			Toast.makeText(getApplicationContext(), "请完成SIM卡的绑定", 0).show();
+		}
 	}
 	/**
 	 * 跳转到第1个界面

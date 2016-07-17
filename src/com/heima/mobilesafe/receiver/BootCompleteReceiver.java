@@ -38,8 +38,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 				// text：短信内容
 				// sentIntent：是否发送成功 一般为null
 				// deliveryIntent：短信的协议;一般为null
-				manager.sendTextMessage("18779167471", null, "发送报警短信！！", null,
-						null);
+				manager.sendTextMessage("18779167471", null, "发送报警短信！！", null,null);
 			}  
 		 }  
 	}
