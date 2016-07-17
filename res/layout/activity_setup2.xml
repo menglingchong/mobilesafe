@@ -40,7 +40,7 @@
         />
 	<!-- 自定义组合控件 -->
     <com.heima.mobilesafe.ui.SettingView
-       android:id="@+id/sv_setting_update"
+       android:id="@+id/sv_setup2_sim"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        heima:title="点击绑定SIM卡"
