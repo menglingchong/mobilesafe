@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.heima.mobilesafe.engine.ContactEngine;
+import com.heima.mobilesafe.utils.MyAsynctask;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -25,13 +27,6 @@ public class ContactActivity extends Activity {
 	@ViewInject(R.id.lv_contact_contacts)
 	private ListView lv_contact_contacts;
 	private List<HashMap<String, String>> list;
-	private Handler handler = new Handler(){
-		public void handleMessage(android.os.Message msg) {
-			lv_contact_contacts.setAdapter(new ContactAdapter());//给listview控件设置适配器
-			//加载数据完成后隐藏进度条
-			pb_contact_loading.setVisibility(View.INVISIBLE);
-		};
-	};
 	@ViewInject(R.id.pb_contact_loading)
 	private ProgressBar pb_contact_loading;
 	@Override
@@ -40,17 +35,40 @@ public class ContactActivity extends Activity {
 		setContentView(R.layout.activity_contact);
 		ViewUtils.inject(this);
 //		pb_contact_loading = (ProgressBar) findViewById(R.id.pb_contact_loading);
-		//加载数据前显示progressbar
-		pb_contact_loading.setVisibility(View.VISIBLE);
+		
 		//子线程中执行耗时操作,获取联系人
-		new Thread(new Runnable() {
+		//异步加载框架
+		new MyAsynctask() {
+			
 			@Override
-			public void run() {
-				list = ContactEngine.getAllContactInfo(getApplicationContext());
-				//获取完联系人的时候给handler发送一个消息，在handler中去setadapter
-				handler.sendEmptyMessage(0);
+			public void preTask() {
+				//加载数据前显示progressbar，在子线程执行之前执行的操作
+				pb_contact_loading.setVisibility(View.VISIBLE);
 			}
-		}).start();
+			
+			@Override
+			public void doInBack() {
+				//在子线程中执行的操作
+				list = ContactEngine.getAllContactInfo(getApplicationContext());
+			}
+			@Override
+			public void postTask() {
+				//在子线程执行之后执行的操作
+				lv_contact_contacts.setAdapter(new ContactAdapter());//给listview控件设置适配器
+				//加载数据完成后隐藏进度条
+				pb_contact_loading.setVisibility(View.INVISIBLE);
+			}
+			
+		}.execute();
+		
+		new AsyncTask<String, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 		
 //		lv_contact_contacts = (ListView) findViewById(R.id.lv_contact_contacts);
 		
