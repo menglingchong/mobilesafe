@@ -1,5 +1,7 @@
 package com.heima.mobilesafe.receiver;
 
+import com.heima.mobilesafe.service.GpsService;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +23,10 @@ public class SmsReceiver extends BroadcastReceiver {
 			if ("#*location*#".equals(body)) {
 				//GPS追踪
 				System.out.println("GPS追踪");
+				//开启一个服务进行后台定位操作，因为获取GPS是耗时操作，不能在主线程中进行，
+				//而广播接收者是主线程,因此不能在广播接收者直接进行GPS定位。并且，广播接收者中不能开启子线程，相应的耗时操作在服务中处理
+				Intent intent_gps = new Intent(context, GpsService.class);
+				context.startService(intent_gps);//开启服务
 				//拦截短信
 				abortBroadcast();//拦截操作，原生android系统中可以，国产定制的系统中可能屏蔽
 				
