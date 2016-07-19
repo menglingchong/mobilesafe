@@ -45,6 +45,13 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <!-- 要想实现拦截短信操作，优先级必须大于0，因为优先级小于0，系统现接收到短信，优先级大于0，我们先接收短信 -->
+        <receiver android:name="com.heima.mobilesafe.receiver.SmsReceiver">
+            
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
