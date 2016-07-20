@@ -1,13 +1,18 @@
 package com.heima.mobilesafe.receiver;
 
+import com.heima.mobilesafe.R;
 import com.heima.mobilesafe.service.GpsService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.telephony.SmsMessage;
 
 public class SmsReceiver extends BroadcastReceiver {
+
+	private MediaPlayer mediaPlayer;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -33,6 +38,20 @@ public class SmsReceiver extends BroadcastReceiver {
 			}else if ("#*alarm*#".equals(body)) {
 				//播放报警音乐
 				System.out.println("播放报警音乐");
+				//在播放报警音乐之前，将系统音量设置成最大
+				//声音的管理者
+				AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+				//设置系统音量的大小
+				//streamType:声音的类型；index：声音的大小；0最小， 15最大；flags：指定信息的标签
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+				//播放报警音乐之前，将之前的播放音乐的资源释放
+				if (mediaPlayer!=null) {
+					mediaPlayer.release();//释放资源
+				}
+				
+				mediaPlayer = MediaPlayer.create(context, R.raw.ylzs);
+				mediaPlayer.start();
+				
 				abortBroadcast();
 				
 			}else if ("#*wipedata*#".equals(body)) {
