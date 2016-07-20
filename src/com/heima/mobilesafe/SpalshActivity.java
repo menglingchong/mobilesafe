@@ -1,6 +1,7 @@
 package com.heima.mobilesafe;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -15,6 +16,7 @@ import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.util.IOUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -108,8 +111,47 @@ public class SpalshActivity extends Activity {
 				}
 			}).start();
 		}
-        
+        copydb();
     }
+	/**
+	 * 拷贝数据库本地手机，将数据库存放在assert目录下，不会自动生成id
+	 */
+	private void copydb() {
+		//从assert目录中将数据库读取出来
+		File file = new File(getFilesDir(), "address.db");
+		if (!file.exists()) {
+			//1.获取assets的管理者
+			AssetManager am = getAssets();
+			InputStream in= null;
+			FileOutputStream out =null;
+			try {
+				//2.读取数据库资源
+				in = am.open("address.db");
+				//getCacheDir():获取缓存的路径；getFilesDir():获取文件的存储路径
+				//写入流
+				out = new FileOutputStream(file);
+				//3.读写操作
+				//设置缓冲区
+				byte[] b =new byte[1024];
+				int len =-1;
+				while ((len=in.read(b)) != -1) {
+					out.write(b, 0, len);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally{
+			/*	try {
+					in.close();
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}*/
+				//xUtils实现，第三方jar包
+				IOUtils.closeQuietly(in);
+				IOUtils.closeQuietly(out);
+			}
+		}
+	}
 	/**
 	 * 弹出对话框
 	 */
@@ -316,8 +358,6 @@ public class SpalshActivity extends Activity {
 			e.printStackTrace();
 		}
 		return null;
-    	
     }
-
 
 }
