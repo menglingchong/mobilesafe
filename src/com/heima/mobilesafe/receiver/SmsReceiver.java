@@ -3,7 +3,10 @@ package com.heima.mobilesafe.receiver;
 import com.heima.mobilesafe.R;
 import com.heima.mobilesafe.service.GpsService;
 
+import android.R.anim;
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -12,10 +15,16 @@ import android.telephony.SmsMessage;
 
 public class SmsReceiver extends BroadcastReceiver {
 
-	private MediaPlayer mediaPlayer;
+	//广播接收者每接收一个新的广播事件的时候就会重新new广播接收者
+	private static MediaPlayer mediaPlayer;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		//获取设备管理器
+		DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		//获取超级管理员标识
+		ComponentName componentName = new ComponentName(context, Admin.class);
+		
 		//接收短信解析的操作，解析短信的内容，如果是指令的话，就执行相应的操作
 		Object[] objs = (Object[]) intent.getExtras().get("pdus");
 		for (Object obj : objs) {
@@ -57,10 +66,18 @@ public class SmsReceiver extends BroadcastReceiver {
 			}else if ("#*wipedata*#".equals(body)) {
 				//远程删除数据
 				System.out.println("远程删除数据");
+				//远程删除数据，类似于恢复出厂设置. flags:标签，在android中flags可用0代替
+				if (devicePolicyManager.isAdminActive(componentName)) {
+					devicePolicyManager.wipeData(0);//清除数据
+				}
 				abortBroadcast();
 			}else if ("#*lockscreen*#".equals(body)) {
 				//远程锁屏
 				System.out.println("远程锁屏");
+				//判断超级管理员权限是否激活
+				if (devicePolicyManager.isAdminActive(componentName)) {
+					devicePolicyManager.lockNow();//锁屏
+				}
 				abortBroadcast();
 			}
 		}
