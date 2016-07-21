@@ -43,6 +43,8 @@
         <activity android:name=".SetUP4Activity"></activity>
         <activity android:name=".SetUPBaseActivity"></activity>
         <activity android:name=".ContactActivity"></activity>
+        <activity android:name=".AToolsActivity"></activity>
+        <activity android:name=".AddressActivity"></activity>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
                 android:priority="1000" >
