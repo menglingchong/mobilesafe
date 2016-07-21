@@ -1,18 +1,21 @@
 package com.heima.mobilesafe;
 
-import com.heima.mobilesafe.db.dao.AddressDao;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.heima.mobilesafe.db.dao.AddressDao;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class AddressActivity extends Activity {
 	//使用注解的方式来找到控件
@@ -64,6 +67,12 @@ public class AddressActivity extends Activity {
 		//2.判断号码是否为空
 		if (TextUtils.isEmpty(queryPhone)) {
 			Toast.makeText(getApplicationContext(), "输入的号码为空，请重新输入！！", 0).show();
+			//实现抖动的效果
+			 Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+			 et_address_queryphone.startAnimation(shake);//开启动画
+			 //实现手机震动的效果
+			 Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+			 vibrator.vibrate(500);
 		}else {
 			// 3.根据号码查询其归属地
 			String location = AddressDao.queryAddress(getApplicationContext(),queryPhone);
