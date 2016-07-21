@@ -46,6 +46,8 @@
         <activity android:name=".ContactActivity"></activity>
         <activity android:name=".AToolsActivity"></activity>
         <activity android:name=".AddressActivity"></activity>
+        <service android:name="com.heima.mobilesafe.service.GpsService"></service>
+        <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
                 android:priority="1000" >
@@ -59,7 +61,7 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <service android:name="com.heima.mobilesafe.service.GpsService"></service>
+       
         <receiver
             android:name="com.heima.mobilesafe.receiver.Admin"
             android:description="@string/sample_device_admin_description"
