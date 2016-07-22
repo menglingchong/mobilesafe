@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/tv_setting_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:text="归属地提示框风格"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_setting_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_setting_title"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:text="处女红"
+        android:textColor="#aa000000"
+        android:textSize="15sp" />
+	
+    <ImageView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:paddingRight="20dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="@drawable/jiantou1"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tv_setting_des"
+        android:layout_marginTop="5dp"
+        android:background="#77000000" />
+
+</RelativeLayout>

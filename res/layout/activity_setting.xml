@@ -80,7 +80,11 @@
        heima:des_on="打开显示号码归属地"
        heima:des_off="关闭显示号码归属地"
        />
-   
+   <com.heima.mobilesafe.ui.SettingClickView
+       android:id="@+id/scv_setting_changebg"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       />
    
    
 </LinearLayout>

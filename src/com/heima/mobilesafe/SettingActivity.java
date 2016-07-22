@@ -1,10 +1,9 @@
 package com.heima.mobilesafe;
 
-import com.heima.mobilesafe.service.AddressService;
-import com.heima.mobilesafe.ui.SettingView;
-import com.heima.mobilesafe.utils.AddressUtils;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -12,11 +11,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.heima.mobilesafe.service.AddressService;
+import com.heima.mobilesafe.ui.SettingClickView;
+import com.heima.mobilesafe.ui.SettingView;
+import com.heima.mobilesafe.utils.AddressUtils;
+
 public class SettingActivity extends Activity {
 
 	private SettingView sv_setting_update;
 	private SharedPreferences sp;
 	private SettingView sv_setting_address;
+	private SettingClickView scv_setting_changebg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +31,63 @@ public class SettingActivity extends Activity {
 		//找到自定义控件，并初始化自定义控件中各个控件
 		sv_setting_update = (SettingView) findViewById(R.id.sv_setting_update);
 		sv_setting_address = (SettingView) findViewById(R.id.sv_setting_address);
-		
+		scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
 		update();
 		address();
+		changebg();
 	}
+
 	//activity显示的时候调用
 	@Override
 	protected void onStart() {
 		super.onStart();
 		address();
+	}
+	
+	/**
+	 * 设置归属地提示框的风格
+	 */
+	private void changebg() {
+		final String[] items={"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+		//设置标题和提示内容
+		scv_setting_changebg.setTitle("归属地提示框风格");
+		//设置对话框描述内容的回显操作
+//		scv_setting_changebg.setDes("处女红");
+		scv_setting_changebg.setDes(items[sp.getInt("which", 0)]);
+		
+		//设置自定义控件的点击事件
+		scv_setting_changebg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//弹出单选对话框
+				AlertDialog.Builder builder = new Builder(SettingActivity.this);
+				//设置图标
+				builder.setIcon(R.drawable.ic_launcher);
+				//设置标题
+				builder.setTitle("归属地提示框风格");
+				//设置单选框
+				//items:选项文本的数组；checkedItem：选中的条目；listener：回调监听
+				builder.setSingleChoiceItems(items, sp.getInt("which", 0), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						Editor edit = sp.edit();
+						edit.putInt("which", which);
+						edit.commit();
+						
+						//设置文本的描述信息
+						scv_setting_changebg.setDes(items[which]);
+						//隐藏对话框
+						dialog.dismiss();
+					}
+				});
+				//设置取消按钮
+				builder.setNegativeButton("取消", null);//当点击按钮只需要隐藏对话框操作的话，只需要将点击监听设为null,表示对话框的隐藏
+				builder.show();
+			}
+		});
 	}
 	/**
 	 * 号码归属地显示
