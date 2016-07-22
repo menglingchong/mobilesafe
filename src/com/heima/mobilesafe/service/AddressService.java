@@ -1,5 +1,6 @@
 package com.heima.mobilesafe.service;
 
+import com.heima.mobilesafe.R;
 import com.heima.mobilesafe.db.dao.AddressDao;
 
 import android.app.Service;
@@ -27,7 +28,9 @@ public class AddressService extends Service {
 	private TelephonyManager telephonyManager;
 	private MyPhoneListener myPhoneListener;
 	private WindowManager windowManager;
-	private TextView textView;
+	private View view;
+	private TextView tv_custom_location;
+//	private TextView textView;
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -87,10 +90,10 @@ public class AddressService extends Service {
 	 * 隐藏toast
 	 */
 	public void hideToast() {
-		if (windowManager !=null && textView!= null ) {
-			windowManager.removeView(textView);//移除控件
+		if (windowManager !=null && view!= null ) {
+			windowManager.removeView(view);//移除控件
 			windowManager =null;
-			textView =null;
+			view =null;
 		}
 	}
 	/**
@@ -99,11 +102,15 @@ public class AddressService extends Service {
 	public void showToast(String location) {
 		//1.创建windowManger管理器
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-		
-		textView = new TextView(getApplicationContext());
+		//将布局文件转化为view对象
+		view = View.inflate(getApplicationContext(), R.layout.toast_custom, null);
+		//找到子布局中的控件
+		tv_custom_location = (TextView) view.findViewById(R.id.tv_custom_location);
+		tv_custom_location.setText(location);
+		/*textView = new TextView(getApplicationContext());
 		textView.setText(location);
 		textView.setTextSize(30);
-		textView.setTextColor(Color.RED);
+		textView.setTextColor(Color.RED);*/
 		//3.设置params属性
 		//layoutparams是toast的属性，控件要添加到父控件中，控件就要使用父控件中的属性，表示控件的属性规则要符合父控件的属性规则
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
@@ -118,7 +125,7 @@ public class AddressService extends Service {
 		//2.将布局文件添加到windowManger中
 		//view:view对象
 		//params： LayoutParams	控件的属性
-		windowManager.addView(textView, params);
+		windowManager.addView(view, params);
 	}
 
 } 

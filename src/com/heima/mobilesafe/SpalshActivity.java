@@ -114,8 +114,8 @@ public class SpalshActivity extends Activity {
 		}
         copydb();
         //开启电话监听的服务
-        Intent intent = new Intent(getApplicationContext(), AddressService.class);
-        startService(intent);//开启服务
+//        Intent intent = new Intent(getApplicationContext(), AddressService.class);
+//        startService(intent);//开启服务
     }
 	/**
 	 * 拷贝数据库本地手机，将数据库存放在assert目录下，不会自动生成id

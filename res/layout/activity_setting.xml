@@ -72,6 +72,14 @@
        heima:des_on="打开提示更新"
        heima:des_off="关闭提示更新"
        />
+   <com.heima.mobilesafe.ui.SettingView
+       android:id="@+id/sv_setting_address"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       heima:title="号码归属地"
+       heima:des_on="打开显示号码归属地"
+       heima:des_off="关闭显示号码归属地"
+       />
    
    
    
