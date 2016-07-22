@@ -47,6 +47,9 @@
         <activity android:name=".ContactActivity"></activity>
         <activity android:name=".AToolsActivity"></activity>
         <activity android:name=".AddressActivity"></activity>
+        <activity android:name=".DragViewActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            ></activity>
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">

@@ -85,6 +85,11 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        />
+   <com.heima.mobilesafe.ui.SettingClickView
+       android:id="@+id/scv_setting_location"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       />
    
    
 </LinearLayout>

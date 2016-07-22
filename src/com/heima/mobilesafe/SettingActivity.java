@@ -22,6 +22,7 @@ public class SettingActivity extends Activity {
 	private SharedPreferences sp;
 	private SettingView sv_setting_address;
 	private SettingClickView scv_setting_changebg;
+	private SettingClickView scv_setting_location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +33,36 @@ public class SettingActivity extends Activity {
 		sv_setting_update = (SettingView) findViewById(R.id.sv_setting_update);
 		sv_setting_address = (SettingView) findViewById(R.id.sv_setting_address);
 		scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
+		scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
 		update();
-		address();
+//		address();
 		changebg();
+		changelocation();
 	}
 
-	//activity显示的时候调用
+	//activity显示的时候调用,可以解决在按home键时返回主界面，然后关闭服务，再进入设置中心时，不更新显示内容的操作
 	@Override
 	protected void onStart() {
 		super.onStart();
 		address();
+	}
+	
+	/**
+	 * 设置归属地提示框的位置
+	 */
+	private void changelocation() {
+		//设置自定义控件的标题和显示的内容
+		scv_setting_location.setTitle("归属地提示框位置");
+		scv_setting_location.setDes("设置归属地提示框的显示位置");
+		//自定义控件的点击事件
+		scv_setting_location.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), DragViewActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 	
 	/**
