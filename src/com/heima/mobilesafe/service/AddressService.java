@@ -171,8 +171,8 @@ public class AddressService extends Service {
 	    //设置toast的位置
 	    params.gravity=Gravity.LEFT | Gravity.TOP;
 	    //不是坐标，表示距离边框的距离，根据gravity来设置的，如果gravity是left表示距离左边框的距离
-		params.x=120;
-		params.y=100;
+		params.x=sp.getInt("x", 100);
+		params.y=sp.getInt("y", 100);
 	    
 		//2.将布局文件添加到windowManger中
 		//view:view对象
