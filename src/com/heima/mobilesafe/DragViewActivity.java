@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class DragViewActivity extends Activity {
 
@@ -21,13 +22,16 @@ public class DragViewActivity extends Activity {
 	private SharedPreferences sp;
 	private int screenWidth;
 	private int screenHeight;
+	private TextView tv_dragview_bottom;
+	private TextView tv_dragview_top;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dragview);
 		sp =getSharedPreferences("config", MODE_PRIVATE);
 		ll_dragview_location = (LinearLayout) findViewById(R.id.ll_dragview_location);
-		
+		tv_dragview_bottom = (TextView) findViewById(R.id.tv_dragview_bottom);
+		tv_dragview_top = (TextView) findViewById(R.id.tv_dragview_top);
 		//获取屏幕的大小
 		WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 //		int width = windowManager.getDefaultDisplay().getWidth();//过期的方法
@@ -51,11 +55,21 @@ public class DragViewActivity extends Activity {
 		//给控件设置属性
 		ll_dragview_location.setLayoutParams(layoutParams);
 		
+		if (y >= screenHeight/2) {
+			//隐藏下方，显示上方
+			tv_dragview_bottom.setVisibility(View.INVISIBLE);
+			tv_dragview_top.setVisibility(View.VISIBLE);
+		} else if (y <screenHeight/2) {
+			//隐藏上方，显示下方
+			tv_dragview_bottom.setVisibility(View.VISIBLE);
+			tv_dragview_top.setVisibility(View.INVISIBLE);
+		}
 		setTouch();
 		setDoubleClick();
 	}
 	
 	long [] mHits = new long[2];
+
 	/**
 	 * 双击居中
 	 */
@@ -131,11 +145,21 @@ public class DragViewActivity extends Activity {
 					int r = l+ll_dragview_location.getWidth();
 					int b = t+ll_dragview_location.getHeight();
 					//在控件的绘制之前要判断ltrb是否超出屏幕，如果超出屏幕就不进行绘制
-					if (l<0 || r>screenWidth ||t<0 || b>screenHeight) {
+					if (l<0 || r>screenWidth ||t<0 || b>screenHeight-30) {
 						break;
 					}
-					
 					ll_dragview_location.layout(l, t, r, b);//重新绘制控件
+					//判断TextView的显示与隐藏
+					int topScreen = ll_dragview_location.getTop();
+					if (topScreen > screenHeight/2) {
+						//隐藏下方，显示上方
+						tv_dragview_bottom.setVisibility(View.INVISIBLE);
+						tv_dragview_top.setVisibility(View.VISIBLE);
+					} else if (topScreen <screenHeight/2) {
+						//隐藏上方，显示下方
+						tv_dragview_bottom.setVisibility(View.VISIBLE);
+						tv_dragview_top.setVisibility(View.INVISIBLE);
+					}
 					//重新设置起始坐标
 					startX = newX;
 					startY = newY;
