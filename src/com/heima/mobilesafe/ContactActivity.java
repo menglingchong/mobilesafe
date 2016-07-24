@@ -60,16 +60,6 @@ public class ContactActivity extends Activity {
 			}
 			
 		}.execute();
-		
-		new AsyncTask<String, Void, Void>() {
-
-			@Override
-			protected Void doInBackground(String... params) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-		
 //		lv_contact_contacts = (ListView) findViewById(R.id.lv_contact_contacts);
 		
 		//listView的条目的点击事件

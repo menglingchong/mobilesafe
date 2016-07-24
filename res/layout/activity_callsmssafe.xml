@@ -20,5 +20,24 @@
         android:paddingTop="10dp"
         android:text="通讯卫士"
         android:textSize="25sp" />
+       <!-- FrameLayout:在布局文件控件中越向下，在显示的时候越在上方 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/lv_callsmssafe_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
+        <!-- 通过控件的自定义属性来设置控件的样式.indeterminateDrawable:是控件的自定义属性 -->
+        <ProgressBar 
+            android:id="@+id/pb_callsmssafe_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/progressbar_drawable"
+            />
+    </FrameLayout>
  
 </LinearLayout>

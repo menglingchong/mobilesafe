@@ -9,7 +9,7 @@ public class BlackNumOpenHelper extends SQLiteOpenHelper {
 	//将表名抽取出来方便我们使用表名，也方便后期修改表名
 	public static final String DB_NAME = "info";
 	public BlackNumOpenHelper(Context context) {
-		super(context, "blackNum", null, 1);
+		super(context, "blackNum.db", null, 1);
 		
 	}
 	//第一次创建数据库的时候调用，创建表结构
