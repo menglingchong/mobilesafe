@@ -51,6 +51,7 @@
         <activity android:name=".DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             ></activity>
+        <activity android:name=".CallSmsSafeActivity"></activity>
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
