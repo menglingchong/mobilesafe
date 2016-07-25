@@ -76,7 +76,7 @@ public class BlackNumDao {
 	public List<BlackNumInfo> querryAllNum(){
 		List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
 		SQLiteDatabase db = blackNumOpenHelper.getWritableDatabase();
-		Cursor cursor = db.query(BlackNumOpenHelper.DB_NAME, new String[]{"blacknum","mode"}, null, null, null, null, null);
+		Cursor cursor = db.query(BlackNumOpenHelper.DB_NAME, new String[]{"blacknum","mode"}, null, null, null, null,"_id desc" );//desc:倒叙查询，默认是正序查询asc
 		//解析cursor
 		while (cursor.moveToNext()) {
 			 String blacknum = cursor.getString(0);
@@ -86,6 +86,29 @@ public class BlackNumDao {
 			 list.add(blackNumInfo);
 		}
 		//关闭数据库
+		cursor.close();
+		db.close();
+		return list;
+	}
+	/**
+	 * 查询数据库中的部分数据
+	 * MaxNum:查询的总条数
+	 * startindex：查询的起始位置
+	 */
+	public List<BlackNumInfo> querryPartNum(int MaxNum,int startindex){
+		
+		List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
+		SQLiteDatabase db = blackNumOpenHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select blacknum,mode from info order by _id desc limit ? offset ?", new String[]{MaxNum+"",startindex+""});
+		//解析cursor
+		while(cursor.moveToNext()) {
+			//获取查询出来的数据
+			String blacknum = cursor.getString(0);
+			int mode = cursor.getInt(1);
+			//将得到的数据添加到bean对象
+			BlackNumInfo blackNumInfo = new BlackNumInfo(blacknum, mode);
+			list.add(blackNumInfo);
+		}
 		cursor.close();
 		db.close();
 		return list;
