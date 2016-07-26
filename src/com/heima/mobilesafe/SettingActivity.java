@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.heima.mobilesafe.service.AddressService;
+import com.heima.mobilesafe.service.BlackNumService;
 import com.heima.mobilesafe.ui.SettingClickView;
 import com.heima.mobilesafe.ui.SettingView;
 import com.heima.mobilesafe.utils.AddressUtils;
@@ -23,7 +24,7 @@ public class SettingActivity extends Activity {
 	private SettingView sv_setting_address;
 	private SettingClickView scv_setting_changebg;
 	private SettingClickView scv_setting_location;
-
+	private SettingView sv_setting_blacknum;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class SettingActivity extends Activity {
 		sv_setting_address = (SettingView) findViewById(R.id.sv_setting_address);
 		scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
 		scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
+		sv_setting_blacknum = (SettingView) findViewById(R.id.sv_setting_blacknum);
 		update();
 //		address();
 		changebg();
@@ -45,8 +47,46 @@ public class SettingActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		address();
+		blacknum();
 	}
 	
+	/**
+	 * 黑名单拦截功能
+	 */
+	private void blacknum() {
+		//回显操作
+		//因为在设置中可以手动关闭服务，因此动态的获取服务
+		if (AddressUtils.isRunningService(getApplicationContext(), "com.heima.mobilesafe.service.BlackNumService")) {
+			//打开黑名单拦截功能
+			sv_setting_blacknum.setChecked(true);
+		}else {
+			//关闭黑名单拦截功能
+			sv_setting_blacknum.setChecked(false);
+		}
+		
+		//自定义控件的点击事件
+		sv_setting_blacknum.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//开启黑名单拦截服务
+				Intent intent = new Intent(getApplicationContext(), BlackNumService.class);
+				//根据checkbox之前的状态设置描述信息
+				if (sv_setting_blacknum.isChecked()) {
+					//关闭黑名单拦截功能
+					sv_setting_blacknum.setChecked(false);
+					//关闭黑名单拦截服务
+					stopService(intent);
+				}else {
+					//开启黑名单拦截功能
+					sv_setting_blacknum.setChecked(true);
+					//开启黑名单拦截服务
+					startService(intent);
+				}
+			}
+		});
+	}
+
 	/**
 	 * 设置归属地提示框的位置
 	 */

@@ -3,7 +3,6 @@ package com.heima.mobilesafe.receiver;
 import com.heima.mobilesafe.R;
 import com.heima.mobilesafe.service.GpsService;
 
-import android.R.anim;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -25,6 +24,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		//获取超级管理员标识
 		ComponentName componentName = new ComponentName(context, Admin.class);
 		
+		System.out.println("清单文件注册的广播接收者接收短信");
 		//接收短信解析的操作，解析短信的内容，如果是指令的话，就执行相应的操作
 		Object[] objs = (Object[]) intent.getExtras().get("pdus");
 		for (Object obj : objs) {

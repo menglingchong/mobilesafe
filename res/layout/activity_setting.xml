@@ -91,5 +91,12 @@
        android:layout_height="wrap_content"
        />
    
-   
+    <com.heima.mobilesafe.ui.SettingView
+       android:id="@+id/sv_setting_blacknum"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       heima:title="黑名单拦截"
+       heima:des_on="打开黑名单拦截功能"
+       heima:des_off="关闭黑名单拦截功能"
+       />
 </LinearLayout>

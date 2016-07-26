@@ -240,13 +240,13 @@ public class CallSmsSafeActivity extends Activity {
 				int mode =-1;
 				int radioButtonId = rg_addblacknum_check.getCheckedRadioButtonId();//获取RadioGroup的选择的buttonId
 				switch (radioButtonId) {
-				case BlackNumDao.CALL://将黑名单的拦截模式设置为电话拦截
+				case R.id.rb_addblacknum_call://将黑名单的拦截模式设置为电话拦截
 					mode = BlackNumDao.CALL;
 					break;
-				case BlackNumDao.SMS://将黑名单的拦截模式设置为短信拦截
+				case  R.id.rb_addblacknum_sms://将黑名单的拦截模式设置为短信拦截
 					mode = BlackNumDao.SMS;
 					break;
-				case BlackNumDao.ALL://将黑名单的拦截模式设置为全部拦截
+				case R.id.rb_addblacknum_all://将黑名单的拦截模式设置为全部拦截
 					mode = BlackNumDao.ALL;
 					break;
 				}

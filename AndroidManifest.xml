@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -54,13 +55,14 @@
         <activity android:name=".CallSmsSafeActivity"></activity>
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
+        <service android:name="com.heima.mobilesafe.service.BlackNumService"></service>
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
                 android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <!-- 要想实现拦截短信操作，优先级必须大于0，因为优先级小于0，系统现接收到短信，优先级大于0，我们先接收短信 -->
+        <!-- 要想实现拦截短信操作，优先级必须大于0，因为优先级小于0，系统先接收到短信，优先级大于0，我们先接收短信 -->
         <receiver android:name="com.heima.mobilesafe.receiver.SmsReceiver">
             
             <intent-filter android:priority="1000">
