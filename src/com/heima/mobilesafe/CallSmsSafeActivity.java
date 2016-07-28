@@ -2,7 +2,7 @@ package com.heima.mobilesafe;
 
 import java.util.List;
 
-import com.heima.mobilesafe.db.bean.BlackNumInfo;
+import com.heima.mobilesafe.bean.BlackNumInfo;
 import com.heima.mobilesafe.db.dao.BlackNumDao;
 import com.heima.mobilesafe.utils.MyAsynctask;
 

@@ -8,8 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.heima.mobilesafe.bean.BlackNumInfo;
 import com.heima.mobilesafe.db.BlackNumOpenHelper;
-import com.heima.mobilesafe.db.bean.BlackNumInfo;
 
 public class BlackNumDao {
 	

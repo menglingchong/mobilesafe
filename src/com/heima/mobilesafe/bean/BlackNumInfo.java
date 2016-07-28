@@ -1,4 +1,4 @@
-package com.heima.mobilesafe.db.bean;
+package com.heima.mobilesafe.bean;
 /**
  * beanÀà
  * @author lenovo

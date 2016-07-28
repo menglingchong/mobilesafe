@@ -12,7 +12,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 
 /**
- * 获取系统联系人
+ * 获取系统联系人，这是业务类
  * @author lenovo
  *
  */
@@ -61,7 +61,7 @@ public class ContactEngine {
 			}
 			//10.将获取到的数据添加到集合中
 			list.add(map);
-			//11.挂壁cursor
+			//11.关闭cursor
 			datacursor.close();
 		  }
 		}
