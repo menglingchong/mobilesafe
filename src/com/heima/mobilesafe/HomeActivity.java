@@ -60,10 +60,13 @@ public class HomeActivity extends Activity {
 					
 					break;
 				case 1://通讯卫士
-					Intent intent = new Intent(getApplicationContext(), CallSmsSafeActivity.class);
-					startActivity(intent);
+					Intent intent1 = new Intent(getApplicationContext(), CallSmsSafeActivity.class);
+					startActivity(intent1);
 					break;
-					
+				case 2://软件管理
+					Intent intent2 = new Intent(HomeActivity.this, SoftManagerActivity.class);
+					startActivity(intent2);
+					break;
 				case 7://高级工具
 					Intent intent7 = new Intent(getApplicationContext(), AToolsActivity.class);
 					startActivity(intent7);

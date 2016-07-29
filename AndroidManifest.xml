@@ -56,6 +56,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             ></activity>
         <activity android:name=".CallSmsSafeActivity"></activity>
+        <activity android:name=".SoftManagerActivity"></activity>
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <service android:name="com.heima.mobilesafe.service.BlackNumService"></service>
