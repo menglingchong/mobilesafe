@@ -3,25 +3,42 @@ package com.heima.mobilesafe;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ShareActionProvider;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.heima.mobilesafe.bean.AppInfo;
 import com.heima.mobilesafe.engine.AppEngine;
 import com.heima.mobilesafe.utils.MyAsynctask;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-public class SoftManagerActivity extends Activity {
+public class SoftManagerActivity extends Activity implements OnClickListener{
 
 	private ListView lv_softmanager_appinfo;
 	private ProgressBar pb_softmanager_loading;
@@ -32,6 +49,9 @@ public class SoftManagerActivity extends Activity {
 	private ArrayList<AppInfo> systemappInfo;
 	private View view;
 	private TextView tv_softmanager_userorsystem;
+	private AppInfo appInfo;
+	private PopupWindow popupWindow;
+	private MyAdapter myAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +64,102 @@ public class SoftManagerActivity extends Activity {
 		fillData();
 		//listView的滑动监听
 		listViewOnScroll();
+		listenItemOnClick();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		//隐藏旧的popupWindow
+		hidepopupWindow();
+	}
+	/**
+	 * listView条目的点击监听事件
+	 */
+	private void listenItemOnClick() {
+		lv_softmanager_appinfo.setOnItemClickListener(new OnItemClickListener() {
+			
+			//view:条目的view对象
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				//弹出气泡
+				//1.屏蔽用于显示用户程序个数和系统程序个数的view对象
+				if (position ==0 || position == userappInfo.size()+1) {
+					return;
+				}
+				//2.获取条目对应的应用程序的信息
+				//数据要从systemappinfo和userappinfo中获取
+				if (position <= userappInfo.size()) {
+					//从userappInfo中获取bean对象信息
+					appInfo = userappInfo.get(position-1);
+				}else {
+					//从systemAPPInfo中获取bena对象信息
+					appInfo = systemappInfo.get(position-userappInfo.size()-2);
+				}
+				//5.弹出气泡前，先要删除旧的气泡
+				hidepopupWindow();
+				//3.弹出气泡
+				//将布局转换成view对象
+				View contentView = View.inflate(getApplicationContext(), R.layout.item_popuwindow, null);
+				
+				//初始化控件
+				LinearLayout ll_popupwindow_uninstall = (LinearLayout) contentView.findViewById(R.id.ll_popupwindow_uninstall);
+				LinearLayout ll_popupwindow_start = (LinearLayout) contentView.findViewById(R.id.ll_popupwindow_start);
+				LinearLayout ll_popupwindow_share = (LinearLayout) contentView.findViewById(R.id.ll_popupwindow_share);
+				LinearLayout ll_popupwindow_detail = (LinearLayout) contentView.findViewById(R.id.ll_popupwindow_detail);
+				
+				//设置控件的点击事件
+				ll_popupwindow_uninstall.setOnClickListener(SoftManagerActivity.this);
+				ll_popupwindow_start.setOnClickListener(SoftManagerActivity.this);
+				ll_popupwindow_share.setOnClickListener(SoftManagerActivity.this);
+				ll_popupwindow_detail.setOnClickListener(SoftManagerActivity.this);
+				
+				//contentView:显示view对象；width,height:view对象的宽高
+				popupWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				//动画要想执行，执行的控件必须有背景，动画是基于背景来执行一些计算，没有背景动画无法执行，popupWindow默认没有设置背景
+				popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				//4.获取条目的位置，让气泡显示在相应在条目上
+				int location[] =new int[2];//保存x和y的坐标的数组
+				view.getLocationInWindow(location);//获取条目x和y的坐标，同时保存到location
+				//获取x和y的坐标
+				int x = location[0];
+				int y = location[1];
+				//parent:要挂载到哪个控件上；gravity，x,y：控制popuWindow显示的位置
+				popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP , x+100,y);
+				
+				//6.设置动画
+				//缩放动画
+				//前四个参数：控制控件由没有到有，动画 0：没有；1：整个控件
+				//后四个参数：控制控件按照只剩还是父控件进行变化
+				//RELATIVE_TO_SELF:按照自身变化
+				//RELATIVE_TO_PARENT:按照父控件变化
+				ScaleAnimation scaleAnimation = new ScaleAnimation(0, 0, 1, 1, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0.5f);
+				scaleAnimation.setDuration(500);
+				
+				//渐变动画
+				AlphaAnimation alphaAnimation = new AlphaAnimation(0.4f, 1.0f);//由半透明变成不透明
+				alphaAnimation.setDuration(500);
+				
+				//组合动画
+				//shareInterpolator:是否使用相同的动画插值器		true:共享	false：不共享，各自使用各自的
+				AnimationSet animationSet = new AnimationSet(true);
+				animationSet.addAnimation(scaleAnimation);
+				animationSet.addAnimation(alphaAnimation);
+				//执行动画
+				contentView.startAnimation(animationSet);
+			}
+
+		});
+	}
+	/**
+	 * 隐藏popupWindow
+	 */
+	private void hidepopupWindow() {
+		if (popupWindow != null) {
+			popupWindow.dismiss();//隐藏popuWindow
+			popupWindow = null;
+		}
 	}
 	/**
 	 * listView控件的滑动监听
@@ -60,6 +176,8 @@ public class SoftManagerActivity extends Activity {
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
+				//滑动的时候隐藏popupWindow
+				hidepopupWindow();
 				//listView在初始化的时候就会调用onScroll()方法,userappInfo和systemappInfo还未加载。所以先要进行不为空的判断
 				if (userappInfo!= null && systemappInfo != null) {
 					if (firstVisibleItem >= userappInfo.size()+1) {
@@ -76,8 +194,6 @@ public class SoftManagerActivity extends Activity {
 	 */
 	private void fillData() {
 		new MyAsynctask() {
-		
-
 			@Override
 			public void preTask() {
 				//显示Progressbar
@@ -87,7 +203,14 @@ public class SoftManagerActivity extends Activity {
 			@Override
 			public void postTask() {
 				//将数据显示到界面
-				lv_softmanager_appinfo.setAdapter(new MyAdapter());
+				if (myAdapter == null) {
+					myAdapter = new MyAdapter();
+					lv_softmanager_appinfo.setAdapter(myAdapter);
+				}else {
+					//更新适配器数据
+					myAdapter.notifyDataSetChanged();
+				}
+				
 				//隐藏progressbar
 				pb_softmanager_loading.setVisibility(View.INVISIBLE);
 			}
@@ -186,7 +309,7 @@ public class SoftManagerActivity extends Activity {
 			}*/
 			//获取相应条目的bean对象
 //			AppInfo appInfo = list.get(position);
-			AppInfo appInfo ;
+			
 			//因为数据分别存在系统程序集合和用户程序集合中，所以相应条目bena对象要到不同的集合中去获取 
 			if (position <= userappInfo.size()) {
 				//用户程序
@@ -214,5 +337,126 @@ public class SoftManagerActivity extends Activity {
 	static class ViewHolder{
 		ImageView iv_itemsoftmanager_icon;
 		TextView tv_itemsoftmanager_name,tv_itemsoftmanager_issd,tv_itemsoftmanager_version;
+	}
+	
+	//popupWindow控件的点击事件
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.ll_popupwindow_uninstall:
+			System.out.println("卸载");
+			uninstall();
+			break;
+		case R.id.ll_popupwindow_start:
+			System.out.println("开启");
+			startSoft();
+			break;
+		case R.id.ll_popupwindow_share:
+			System.out.println("分享");
+			shareSoft();
+			break;
+		case R.id.ll_popupwindow_detail:
+			System.out.println("详情");
+			detail();
+			break;
+
+		}
+	}
+	/**
+	 * 软件分享
+	 */
+	private void shareSoft() {
+		/**
+		 * 通过log日志查看跳转信息
+		 *  Intent 
+			{ 
+				act=android.intent.action.SEND  :action
+				typ=text/plain 					:type		
+				flg=0x3000000 					:flag
+				cmp=com.android.mms/.ui.ComposeMessageActivity (has extras)   intent中包含信息
+			} from pid 228
+		 */
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.SEND");
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, "发现一个很牛逼的软件，"+appInfo.getName()+",请自行下载！！");
+		startActivity(intent);
+		/*Intent intent = new Intent();
+		intent.setAction("android.intent.action.SEND");
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, "发现一个很牛x软件"+appInfo.getName()+",下载地址:www.baidu.com,自己去搜");
+		startActivity(intent);*/
+	}
+
+	/**
+	 * 软件详情
+	 */
+	private void detail() {
+		/**
+		 * 通过系统的log日志查看跳转的信息
+		 *  Intent 
+			{ 
+			act=android.settings.APPLICATION_DETAILS_SETTINGS    action
+			dat=package:com.example.android.apis   data
+			cmp=com.android.settings/.applications.InstalledAppDetails  开启的activity
+			} from pid 228
+		 */
+		Intent intent = new Intent();
+		intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+		intent.setData(Uri.parse("package:"+appInfo.getPackageName()));
+		startActivity(intent);
+	}
+
+	/**
+	 * 开启软件
+	 */
+	private void startSoft() {
+		PackageManager pm = getPackageManager();
+		//获取应用程序的启动意图
+		Intent intent = pm.getLaunchIntentForPackage(appInfo.getPackageName());
+		if (intent != null) {
+			startActivity(intent);
+		} else {
+			Toast.makeText(getApplicationContext(), "系统核心程序，无法启动",0).show();
+		}
+	}
+
+	/**
+	 * 卸载软件
+	 */
+	private void uninstall() {
+		//通过隐式意图去实现卸载软件的操作
+		/**
+		 *  <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.DELETE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="package" />
+            </intent-filter>
+		 */
+		//判断是否是系统核心程序，若是则不能卸载
+		if (appInfo.isUser()) {
+			//判断是否是自己的程序，若是就不卸载
+			if (!appInfo.getPackageName().equals(getPackageName())) {
+				Intent intent = new Intent();
+				intent.setAction("android.intent.action.DELETE");
+				intent.addCategory("android.intent.category.DEFAULT");
+				intent.setData(Uri.parse("package:"+appInfo.getPackageName()));
+				startActivityForResult(intent, 0);
+			}else {
+				Toast.makeText(getApplicationContext(), "自己的程序，不能随便卸载", 0).show();
+			}
+		}else {
+			Toast.makeText(getApplicationContext(), "系统核心程序，不能卸载！", 0).show();
+		}
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case 0:
+			fillData();//加载数据
+			break;
+		}
 	}
 }
