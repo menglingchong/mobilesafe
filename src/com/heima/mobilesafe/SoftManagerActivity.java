@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 
 import com.heima.mobilesafe.bean.AppInfo;
 import com.heima.mobilesafe.engine.AppEngine;
+import com.heima.mobilesafe.utils.AppUtil;
 import com.heima.mobilesafe.utils.MyAsynctask;
 
 public class SoftManagerActivity extends Activity implements OnClickListener{
@@ -52,6 +54,8 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 	private AppInfo appInfo;
 	private PopupWindow popupWindow;
 	private MyAdapter myAdapter;
+	private TextView tv_softmanager_rom;
+	private TextView tv_softmanager_sd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +64,17 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 		lv_softmanager_appinfo = (ListView) findViewById(R.id.lv_softmanager_appinfo);
 		pb_softmanager_loading = (ProgressBar) findViewById(R.id.pb_softmanager_loading);
 		tv_softmanager_userorsystem = (TextView) findViewById(R.id.tv_softmanager_userorsystem);
+		tv_softmanager_rom = (TextView) findViewById(R.id.tv_softmanager_rom);
+		tv_softmanager_sd = (TextView) findViewById(R.id.tv_softmanager_sd);
+		//获取可用内存，获取的都是kb
+		long availableRom = AppUtil.getAvailableRom();
+		long availableSD = AppUtil.getAvailableSD();
+		//数据转化
+		String sdsize = Formatter.formatFileSize(getApplicationContext(), availableSD);
+		String romsize = Formatter.formatFileSize(getApplicationContext(), availableRom);
+		//设置显示
+		tv_softmanager_rom.setText("内存可用："+romsize);
+		tv_softmanager_sd.setText("SD卡可用："+sdsize);
 		//异步加载AppInfo信息数据
 		fillData();
 		//listView的滑动监听
