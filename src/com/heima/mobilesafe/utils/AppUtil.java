@@ -27,7 +27,7 @@ public class AppUtil {
 		//获取手机内存的路径
 		File path = Environment.getDataDirectory();
 		//硬盘的api操作
-		StatFs stat = new StatFs(path.getPath());
+		StatFs stat = new StatFs(path.getPath()); 
 		int blockSize = stat.getBlockSize();//获取每块硬盘的大小
 		int totalBlocks = stat.getBlockCount();//获取硬盘的总数
 		int availableBlocks = stat.getAvailableBlocks();//获取可用的块数

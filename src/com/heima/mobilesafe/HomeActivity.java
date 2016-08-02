@@ -67,6 +67,10 @@ public class HomeActivity extends Activity {
 					Intent intent2 = new Intent(HomeActivity.this, SoftManagerActivity.class);
 					startActivity(intent2);
 					break;
+				case 3:
+					Intent intent3 = new Intent(HomeActivity.this,TaskManagerActivity.class);
+					startActivity(intent3);
+					break;
 				case 7://高级工具
 					Intent intent7 = new Intent(getApplicationContext(), AToolsActivity.class);
 					startActivity(intent7);
