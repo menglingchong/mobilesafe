@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="300dp"
+    android:minHeight="40dp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/process_widget"
+    android:resizeMode="horizontal|vertical">
+    
+</appwidget-provider>
+
+<!-- minWidth,minHeight:widget的宽高 
+	updatePeriodMillis：更新时间，毫秒值，最短不小于30分钟，设置0和30分钟是一个效果
+	previewImage：预览图片，不设置，默认使用应用图标
+	initialLayout：widget的布局文件
+	configure：可选数据，创建widget后会启动哪个activity
+	resizeMode:设置widget的尺寸规则，主要用来设置屏幕横竖屏切换保证widget布局不会变形
+	widgetCategory：设置widget显示在什么地方，home_screen：显示在桌面，keyguard：显示在键盘
+	initialKeyguardLayout：设置锁屏的时候显示控件的布局
+-->

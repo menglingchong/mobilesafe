@@ -59,9 +59,11 @@
         <activity android:name=".CallSmsSafeActivity"></activity>
         <activity android:name=".SoftManagerActivity"></activity>
         <activity android:name=".TaskManagerActivity"></activity>
+        
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <service android:name="com.heima.mobilesafe.service.BlackNumService"></service>
+        
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
                 android:priority="1000" >
@@ -88,6 +90,16 @@
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
+        </receiver>
+        <!-- appwidgetProvider不是内容提供者，而是广播接收者 -->
+        <receiver android:name="com.heima.mobilesafe.receiver.MyWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/example_appwidget_info" />
         </receiver>
     </application>
 
