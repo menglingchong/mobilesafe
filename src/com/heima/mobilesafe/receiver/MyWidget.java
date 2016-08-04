@@ -1,9 +1,12 @@
 package com.heima.mobilesafe.receiver;
 
+import com.heima.mobilesafe.service.WidgetService;
+
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.sax.StartElementListener;
 //AppWidgetProvider:是广播接收者
 public class MyWidget extends AppWidgetProvider {
 
@@ -34,12 +37,18 @@ public class MyWidget extends AppWidgetProvider {
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
 		System.out.println("onEnabled");
+		//开启WidgetService，用来更新Widget的显示内容
+		Intent intent = new Intent(context,WidgetService.class);
+		context.startService(intent);
 	}
 	//最后一次删除会调用onDisabled
 	@Override
 	public void onDisabled(Context context) {
 		super.onDisabled(context);
 		System.out.println("onDisabled");
+		//关闭WidgetService服务
+		Intent intent = new Intent(context, WidgetService.class);
+		context.stopService(intent);
 	}
 
 }

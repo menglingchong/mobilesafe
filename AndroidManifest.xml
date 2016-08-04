@@ -63,6 +63,7 @@
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <service android:name="com.heima.mobilesafe.service.BlackNumService"></service>
+        <service android:name="com.heima.mobilesafe.service.WidgetService"></service>
         
         <receiver android:name="com.heima.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter 
