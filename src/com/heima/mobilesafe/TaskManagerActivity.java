@@ -1,5 +1,6 @@
 package com.heima.mobilesafe;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.heima.mobilesafe.bean.TaskInfo;
 import com.heima.mobilesafe.engine.TaskEngine;
 import com.heima.mobilesafe.utils.MyAsynctask;
+import com.heima.mobilesafe.utils.TaskUtil;
 
 public class TaskManagerActivity extends Activity {
 
@@ -39,16 +41,44 @@ public class TaskManagerActivity extends Activity {
 	private ArrayList<TaskInfo> userappInfo;
 	//系统程序集合
 	private ArrayList<TaskInfo> systemappInfo;
+	private TextView tv_taskmanager_count;
+	private TextView tv_taskmanager_rom;
+	private int processCount;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_taskmanager);
 		lv_taskmanager_process = (ListView) findViewById(R.id.lv_taskmanager_process);
 		pb_taskmanager_loading = (ProgressBar) findViewById(R.id.pb_taskmanager_loading);
+		tv_taskmanager_count = (TextView) findViewById(R.id.tv_taskmanager_count);
+		tv_taskmanager_rom = (TextView) findViewById(R.id.tv_taskmanager_rom);
+		
+		//获取系统正在运行的进程个数和内存大小
+		processCount = TaskUtil.getProcessCount(getApplicationContext());
+		long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+		//获取总内存
+		//根据不同的sdk版本去调用不同的方法
+		//获取当前的sdk版本
+		int sdk =android.os.Build.VERSION.SDK_INT;
+		long totalRam=0;
+		if (sdk >=16) {
+			totalRam = TaskUtil.getTotalRam(getApplicationContext());
+		}else {
+			totalRam = TaskUtil.getTotalRam();
+		}
+		//数据转化
+		String avRam = Formatter.formatFileSize(getApplicationContext(), availableRam);
+		String toRam = Formatter.formatFileSize(getApplicationContext(), totalRam);
+		//设置正在运行的进程的个数和内存的大小
+		tv_taskmanager_count.setText("运行中的进程：\n"+processCount+"个");
+		tv_taskmanager_rom.setText("剩余内存/总内存：\n"+avRam+"/"+toRam);
+		
+		
 		//加载数据
 		fillData();
 		//条目的点击事件,更改条目的选择状态
 		listViewItemClick();
+		
 	}
 	//条目的点击事件
 	private void listViewItemClick() {
@@ -72,7 +102,10 @@ public class TaskManagerActivity extends Activity {
 				if (taskInfo.isChecked()) {
 					taskInfo.setChecked(false);//设置为取消状态
 				}else {
-					taskInfo.setChecked(true);//设置为选中状态
+					//判断如果不是当前应用则设置为选中状态 
+					if (!taskInfo.getPackageName().equals(getPackageName())) {
+						taskInfo.setChecked(true);//设置为选中状态
+					}
 				}
 				//更新adapter
 //				myAdapter.notifyDataSetChanged();
@@ -280,8 +313,8 @@ public class TaskManagerActivity extends Activity {
 		for (int i = 0; i < systemappInfo.size(); i++) {
 			if (systemappInfo.get(i).isChecked()) {
 				activityManager.killBackgroundProcesses(systemappInfo.get(i).getPackageName());
+				deleteList.add(systemappInfo.get(i));
 			}
-			deleteList.add(systemappInfo.get(i));
 		}
 		long memory =0;
 		//遍历deleteList，分别从userappinfo和systemappinfo中删除deleteList中的数据
@@ -299,6 +332,31 @@ public class TaskManagerActivity extends Activity {
 		//数据转化
 		String memorySize = Formatter.formatFileSize(getApplicationContext(), memory);
 		Toast.makeText(getApplicationContext(), "共清理："+deleteList.size()+"个进程，释放："+memorySize+"内存空间", 0).show();
+		
+		//改变正在运行的进程数以及清剩余内存
+		processCount= processCount-deleteList.size();
+		tv_taskmanager_count.setText("运行中进程:\n" + processCount + "个");
+		//更改剩余总内存，即重新获取剩余总内存
+		// 更改剩余总内存,重新获取剩余总内存
+				// 获取剩余,总内存'
+				long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+				// 数据转化
+				String availaRam = Formatter.formatFileSize(getApplicationContext(),availableRam);
+				// 获取总内存
+				// 根据不同的sdk版去调用不同的方法
+				// 1.获取当前的sdk版本
+				int sdk = android.os.Build.VERSION.SDK_INT;
+				long totalRam;
+				if (sdk >= 16) {
+					totalRam = TaskUtil.getTotalRam(getApplicationContext());
+				} else {
+					totalRam = TaskUtil.getTotalRam();
+				}
+				// 数据转化
+				String totRam = Formatter.formatFileSize(getApplicationContext(),totalRam);
+				tv_taskmanager_rom.setText("剩余/总内存:\n" + availaRam + "/"+ totRam);
+
+	
 		//为下次清理进程做准备
 		deleteList.clear();
 		deleteList=null;
