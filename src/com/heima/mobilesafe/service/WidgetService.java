@@ -31,10 +31,42 @@ public class WidgetService extends Service {
 	private AppWidgetManager appWidgetManager;
 	private WidgetReceiver widgetReceiver;
 	private Timer timer;
+	private ScreenOnReceiver screenOnReceiver;
+	private ScreenOffReceiver screenOffReceiver;
 
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
+	}
+	/**
+	 * 锁屏的广播接收者
+	 * @author lenovo
+	 *
+	 */
+	public class ScreenOffReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			System.out.println("锁屏了。。。。");
+			//清理进程
+			killProcess();
+			//停止更新
+			stopUpdate();
+		}
+	}
+	/**
+	 * 解锁的广播接收者
+	 * @author lenovo
+	 *
+	 */
+	public class ScreenOnReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//更新进程
+			updateWidget();
+		}
+		
 	}
 	/**
 	 * 清理的广播接收者
@@ -46,17 +78,17 @@ public class WidgetService extends Service {
 			//清理进程
 			killProcess();
 		}
-		//清理进程
-		private void killProcess() {
-			//获取进程管理者
-			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-			//获取正在运行的所有进程
-			List<RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
-			for (RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
-				//判断自己的应用进程不能被清理
-				if (! runningAppProcessInfo.processName.equals(getPackageName())) {
-					am.killBackgroundProcesses(runningAppProcessInfo.processName);
-				}
+	}
+	//清理进程
+	private void killProcess() {
+		//获取进程管理者
+		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		//获取正在运行的所有进程
+		List<RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
+		for (RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+			//判断自己的应用进程不能被清理
+			if (! runningAppProcessInfo.processName.equals(getPackageName())) {
+				am.killBackgroundProcesses(runningAppProcessInfo.processName);
 			}
 		}
 	}
@@ -73,6 +105,20 @@ public class WidgetService extends Service {
 		//3.注册广播接收者
 		registerReceiver(widgetReceiver, intentFilter);
 		
+		//android中锁屏和解锁的广播接收者比较特殊，必须通过代码的方式进行注册
+		//注册锁屏的广播接收者
+		screenOffReceiver = new ScreenOffReceiver();
+		//设置广播事件
+		IntentFilter offIntentFilter = new IntentFilter();
+		offIntentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+		registerReceiver(screenOffReceiver, offIntentFilter);
+		
+		//注册解锁的广播接收者
+		screenOnReceiver = new ScreenOnReceiver();
+		IntentFilter onIntentFilter = new IntentFilter();
+		onIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
+		registerReceiver(screenOnReceiver, onIntentFilter);
+		
 		//获取Widget的管理者
 		appWidgetManager = AppWidgetManager.getInstance(this);
 		//更新widget,每隔一段时间进行更新操作
@@ -83,25 +129,37 @@ public class WidgetService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		//停止更新widget
-		if (timer != null) {
-			timer.cancel();
-			timer =null;
-		}
+		stopUpdate();
 		//取消注册广播接收者
 		if (widgetReceiver != null) {
 			unregisterReceiver(widgetReceiver);
 			widgetReceiver=null;
 		}
+		//取消锁屏的广播接收者
+		if (screenOffReceiver!= null) {
+			unregisterReceiver(screenOffReceiver);
+			screenOffReceiver=null;
+		}
+		//取消解锁的广播接收者
+		if (screenOnReceiver!= null) {
+			unregisterReceiver(screenOnReceiver);
+			screenOnReceiver=null;
+		}
 		
+	}
+	//停止更新
+	private void stopUpdate() {
+		if (timer != null) {
+			timer.cancel();
+			timer =null;
+		}
 	}
 	/**
 	 * 更新widget
 	 */
 	private void updateWidget() {
 		//计数器
-		
 		timer = new Timer();
-		
 		//执行操作
 		//task:要执行的操作；when:延迟的时间；period：每次执行的间隔时间
 		timer.schedule(new TimerTask() {
