@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.heima.mobilesafe.bean.AppInfo;
 import com.heima.mobilesafe.engine.AppEngine;
 import com.heima.mobilesafe.utils.AppUtil;
+import com.heima.mobilesafe.utils.DensityUtil;
 import com.heima.mobilesafe.utils.MyAsynctask;
 
 public class SoftManagerActivity extends Activity implements OnClickListener{
@@ -141,7 +142,7 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 				int x = location[0];
 				int y = location[1];
 				//parent:要挂载到哪个控件上；gravity，x,y：控制popuWindow显示的位置
-				popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP , x+100,y);
+				popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP , x+DensityUtil.dip2qx(getApplicationContext(), 50),y);
 				
 				//6.设置动画
 				//缩放动画
