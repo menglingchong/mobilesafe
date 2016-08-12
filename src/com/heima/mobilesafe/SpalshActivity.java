@@ -26,10 +26,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -116,7 +119,36 @@ public class SpalshActivity extends Activity {
         //开启电话监听的服务
 //        Intent intent = new Intent(getApplicationContext(), AddressService.class);
 //        startService(intent);//开启服务
+        
+        //创建快捷方式
+        shortcut();
     }
+	/**
+	 * 创建桌面快捷方式
+	 */
+	private void shortcut() {
+		if (sp.getBoolean("firstshortcut", true)) {
+			//给桌面发送一个广播
+			Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+			//设置快捷方式的名称
+			intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "手机卫士");
+			//设置快捷方式的图标
+			Bitmap value = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+			intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, value);
+			//设置快捷方式执行的操作
+			Intent intent2 = new Intent();
+			intent2.setAction("com.heima.mobilesafe.home");
+			intent2.addCategory("android.intent.category.DEFAULT");
+			
+			intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent2);
+			sendBroadcast(intent);
+			
+			//保存已创建桌面快捷方式的状态
+			Editor edit = sp.edit();
+			edit.putBoolean("firstshortcut", false);
+			edit.commit();
+		}
+	}
 	/**
 	 * 拷贝数据库本地手机，将数据库存放在assert目录下，不会自动生成id
 	 */

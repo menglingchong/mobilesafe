@@ -24,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.heima.mobilesafe.bean.AppInfo;
+import com.heima.mobilesafe.db.dao.WatchDogDao;
 import com.heima.mobilesafe.engine.AppEngine;
 import com.heima.mobilesafe.utils.AppUtil;
 import com.heima.mobilesafe.utils.DensityUtil;
@@ -57,11 +59,13 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 	private MyAdapter myAdapter;
 	private TextView tv_softmanager_rom;
 	private TextView tv_softmanager_sd;
+	private WatchDogDao watchDogDao;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_softmanager);
 		
+		watchDogDao = new WatchDogDao(getApplicationContext());
 		lv_softmanager_appinfo = (ListView) findViewById(R.id.lv_softmanager_appinfo);
 		pb_softmanager_loading = (ProgressBar) findViewById(R.id.pb_softmanager_loading);
 		tv_softmanager_userorsystem = (TextView) findViewById(R.id.tv_softmanager_userorsystem);
@@ -81,8 +85,58 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 		//listView的滑动监听
 		listViewOnScroll();
 		listenItemOnClick();
+		listenItemLognClick();
 	}
-	
+	/**
+	 * 条目的长按点击事件
+	 */
+	private void listenItemLognClick() {
+		lv_softmanager_appinfo.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				//返回值是true:表示执行操作，false：拦截操作
+				//加锁和解锁的操作
+				//1.屏蔽用于显示用户程序个数和系统程序个数的view条目
+				if (position ==0 || position == userappInfo.size()+1) {
+					return true;
+				}
+				//获取数据
+				if (position <= userappInfo.size()) {
+					//用户程序
+					appInfo =userappInfo.get(position-1);
+					
+				}else {
+					//系统程序
+					appInfo = systemappInfo.get(position-userappInfo.size()-2);
+				}
+				//加锁解锁
+				ViewHolder viewHolder = (ViewHolder) view.getTag();
+				//判断应用程序有没有加锁，有解锁，没有加锁
+				if (watchDogDao.queryLockApp(appInfo.getPackageName())) {
+					//解锁
+					watchDogDao.delLockApp(appInfo.getPackageName());//从数据库中删除应用程序的包名
+					viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+				}else {
+					//加锁操作
+					//判断如果是当前应用程序，就不加锁
+					if (!appInfo.getPackageName().equals(getPackageName())) {
+						
+						watchDogDao.addLockApp(appInfo.getPackageName());
+						viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+					}else {
+						Toast.makeText(getApplicationContext(), "当前应用程序不能加锁！", 0).show();
+					}
+				}
+				//更新适配器
+//				myAdapter.notifyDataSetChanged();
+				//返回true：执行操作，将事件消费掉，false：拦截操作
+				return true;
+			}
+		});
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -300,6 +354,7 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 				viewHolder.tv_itemsoftmanager_name = (TextView) view.findViewById(R.id.tv_itemsoftmanager_name);
 				viewHolder.tv_itemsoftmanager_issd = (TextView) view.findViewById(R.id.tv_itemsoftmanager_issd);
 				viewHolder.tv_itemsoftmanager_version = (TextView) view.findViewById(R.id.tv_itemsoftmanager_version);
+				viewHolder.iv_itemsoftmanager_islock = (ImageView) view.findViewById(R.id.iv_itemsoftmanager_islock);
 				//将viewholer和view对象绑定
 				view.setTag(viewHolder);
 			}
@@ -346,12 +401,22 @@ public class SoftManagerActivity extends Activity implements OnClickListener{
 				//安装在手机
 				viewHolder.tv_itemsoftmanager_issd.setText("手机存储");
 			}
+			
+			//判断应用程序是加锁还是解锁
+			if (watchDogDao.queryLockApp(appInfo.getPackageName())) {
+				//加锁
+				viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+			}else {
+				//解锁
+				viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+			}
+			
 			return view;
 		}
 	}
 	
 	static class ViewHolder{
-		ImageView iv_itemsoftmanager_icon;
+		ImageView iv_itemsoftmanager_icon,iv_itemsoftmanager_islock;
 		TextView tv_itemsoftmanager_name,tv_itemsoftmanager_issd,tv_itemsoftmanager_version;
 	}
 	

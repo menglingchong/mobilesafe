@@ -8,7 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 
 /**
- * 动态获取服务的转态的工具类
+ * 动态获取服务的状态的工具类
  * @author lenovo
  *
  */

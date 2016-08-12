@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 
 import com.heima.mobilesafe.service.AddressService;
 import com.heima.mobilesafe.service.BlackNumService;
+import com.heima.mobilesafe.service.WatchdogService;
 import com.heima.mobilesafe.ui.SettingClickView;
 import com.heima.mobilesafe.ui.SettingView;
 import com.heima.mobilesafe.utils.AddressUtils;
@@ -25,6 +26,7 @@ public class SettingActivity extends Activity {
 	private SettingClickView scv_setting_changebg;
 	private SettingClickView scv_setting_location;
 	private SettingView sv_setting_blacknum;
+	private SettingView sv_setting_lock;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,10 +38,46 @@ public class SettingActivity extends Activity {
 		scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
 		scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
 		sv_setting_blacknum = (SettingView) findViewById(R.id.sv_setting_blacknum);
+		sv_setting_lock  = (SettingView) findViewById(R.id.sv_setting_lock);
 		update();
 //		address();
 		changebg();
 		changelocation();
+		lock();
+	}
+	//应用加锁功能
+	private void lock() {
+		//回显操作
+		//因为在设置中可以手动关闭服务，因此动态的获取服务
+		if (AddressUtils.isRunningService(getApplicationContext(), "com.heima.mobilesafe.service.WatchdogService")) {
+			//打开软件锁功能
+			sv_setting_lock.setChecked(true);
+		}else {
+			//关闭软件锁功能
+			sv_setting_lock.setChecked(false);
+		}
+		
+		//自定义控件的点击事件
+		sv_setting_lock.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//开启软件锁服务
+				Intent intent = new Intent(getApplicationContext(), WatchdogService.class);
+				//根据checkbox之前的状态设置描述信息
+				if (sv_setting_lock.isChecked()) {
+					//关闭软件锁功能
+					sv_setting_lock.setChecked(false);
+					//关闭软件锁服务
+					stopService(intent);
+				}else {
+					//开启软件锁功能
+					sv_setting_lock.setChecked(true);
+					//开启软件锁服务
+					startService(intent);
+				}
+			}
+		});
 	}
 
 	//activity显示的时候调用,可以解决在按home键时返回主界面，然后关闭服务，再进入设置中心时，不更新显示内容的操作

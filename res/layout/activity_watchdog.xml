@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!--
+         layout_gravity:设置控件在父控件中的位置
+    	 gravity:设置控件的内容在该控件中的位置
+    	 
+    	 layout_marginTop:设置控件距离某控件的位置
+    	 paddingTop:设置距离控件内边框的距离 	 
+    -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8866ff00"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="解锁"
+        android:textSize="25sp" />
+
+    <ImageView 
+        android:id="@+id/iv_watchdog_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        
+        />
+    <TextView 
+        android:id="@+id/tv_watchdog_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="解锁的程序"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        />
+    <EditText
+        android:id="@+id/et_watchdog_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" 
+        android:hint="请输入解锁密码"
+        >
+    </EditText>
+
+    <Button
+        android:id="@+id/bt_watchdog_unlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="解锁" />
+
+</LinearLayout>
