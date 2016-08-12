@@ -10,9 +10,13 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 
@@ -23,7 +27,8 @@ public class WatchdogService extends Service {
 	private UnLockReceiver unLockReceiver;
 	private String unlockpackagename;
 	private ScreenReceiver screenReceiver;
-
+	private List<String> list;
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -73,9 +78,25 @@ public class WatchdogService extends Service {
 		//activity都是存放在任务栈中的，一个应用只有一个任务栈
 		final ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
+				//数据库的优化，先将数据库中的数据查询放到内存，然后把数据从内存中取出来，这样减少了对数据库的访问
+				list = watchDogDao.querryAllLockApp();
+				//当数据库发生变化时更新内存中的数据，当数据库变化的时候通知内容观察者数据库发生变化了，然后在内容观察者中更新数据
+				Uri uri = Uri.parse("content://com.heima.mobilesafe.lock.changed");
+				//notifyForDescendents:匹配模式： true：精确匹配 false:粗略匹配
+				
+				getContentResolver().registerContentObserver(uri, true, new ContentObserver(null) {
+					//new ContentObserver(null):参数为空的原因是不能在子线程中声明Hnadler
+					@Override
+					public void onChange(boolean selfChange) {
+						super.onChange(selfChange);
+						//更新数据
+						list = watchDogDao.querryAllLockApp();
+					}
+				});
+				
 				while (islock) {
 					//监听用户打开了哪些任务栈，即打开了哪些应用
 					//获取正在运行的任务栈，如果任务栈运行，则应用打开过
@@ -88,7 +109,8 @@ public class WatchdogService extends Service {
 						String packageName = baseActivity.getPackageName();
 						System.out.println(packageName);
 						//通过查询数据库，如果数据库中有该包名，则跳转到解锁界面，否则不进行跳转
-						if (watchDogDao.queryLockApp(packageName)){
+						boolean b = list.contains(packageName);
+						if (b){
 							if (!packageName.equals(unlockpackagename)) {
 								Intent intent = new Intent(WatchdogService.this, WatchDogActivity.class);
 								intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

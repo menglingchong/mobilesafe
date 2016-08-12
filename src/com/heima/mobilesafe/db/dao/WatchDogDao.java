@@ -3,10 +3,12 @@ package com.heima.mobilesafe.db.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.heima.mobilesafe.bean.BlackNumInfo;
 import com.heima.mobilesafe.db.WatchDogOpenHelper;
@@ -20,10 +22,11 @@ public class WatchDogDao {
 	
 	private WatchDogOpenHelper watchDogOpenHelper;
 	private int mode;
-
+	private Context context;
 	//在构造函数中创建数据库
 	public WatchDogDao(Context context){
 		watchDogOpenHelper = new WatchDogOpenHelper(context);
+		this.context = context;
 	}
 	/**
 	 * 添加应用程序包名
@@ -34,6 +37,13 @@ public class WatchDogDao {
 		ContentValues values = new ContentValues(); 
 		values.put("packagename",packagename);
 		db.insert(WatchDogOpenHelper.DB_NAME, null, values);
+		
+		//数据库发生变化的时候通知内容观察者，数据库发生变化了
+		ContentResolver contentResolver = context.getContentResolver();
+		//因为是我们自己应用程序的数据库发生变化，所以我们要定义一个uri进行操作
+		Uri uri = Uri.parse("content://com.heima.mobilesafe.lock.changed");
+		//通知内容观察者数据库发生变化
+		contentResolver.notifyChange(uri, null);
 		db.close();//关闭数据库，可以防止内存益出
 	}
 	/**
@@ -42,6 +52,14 @@ public class WatchDogDao {
 	public void delLockApp(String packagename){
 		SQLiteDatabase db = watchDogOpenHelper.getWritableDatabase();
 		db.delete(WatchDogOpenHelper.DB_NAME, "packagename=?", new String[]{packagename});
+		
+		//数据库发生变化的时候通知内容观察者，数据库发生变化了
+		ContentResolver contentResolver = context.getContentResolver();
+		//因为是我们自己应用程序的数据库发生变化，所以我们要定义一个uri进行操作
+		Uri uri = Uri.parse("content://com.heima.mobilesafe.lock.changed");
+		//通知内容观察者数据库发生变化
+		contentResolver.notifyChange(uri, null);
+		
 		db.close();
 	}
 
