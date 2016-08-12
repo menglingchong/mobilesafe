@@ -53,6 +53,8 @@
         android:id="@+id/bt_watchdog_unlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="解锁" />
+        android:text="解锁" 
+        android:onClick="lock"
+        />
 
 </LinearLayout>

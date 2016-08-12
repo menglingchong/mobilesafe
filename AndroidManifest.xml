@@ -64,8 +64,18 @@
         <activity android:name=".CallSmsSafeActivity"></activity>
         <activity android:name=".SoftManagerActivity"></activity>
         <activity android:name=".TaskManagerActivity"></activity>
-        <activity android:name=".WatchDogActivity"></activity>
-        
+        <activity android:name=".WatchDogActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            ></activity>
+        <!-- 
+        	standard:标准的启动模式
+        	singleTop:将activity置为栈顶
+        	singleTask：如果任务栈中的activity之前有该activity则将其中的activity删除，将该activity置顶
+        	singleInstance:将activity单独放在一个任务栈中
+        	android:excludeFromRecents="true":包含该activity的任务栈是否显示在最近列表中，true：表示不显示，false：表示显示.
+        	但是只有设置了这个属性的activity运行了，该属性才生效
+         -->
         <service android:name="com.heima.mobilesafe.service.GpsService"></service>
         <service android:name="com.heima.mobilesafe.service.AddressService"></service>
         <service android:name="com.heima.mobilesafe.service.BlackNumService"></service>
