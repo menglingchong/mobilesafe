@@ -115,7 +115,8 @@ public class SpalshActivity extends Activity {
 				}
 			}).start();
 		}
-        copydb();
+        copydb("address.db");
+        copydb("antivirus.db");
         //开启电话监听的服务
 //        Intent intent = new Intent(getApplicationContext(), AddressService.class);
 //        startService(intent);//开启服务
@@ -152,9 +153,9 @@ public class SpalshActivity extends Activity {
 	/**
 	 * 拷贝数据库本地手机，将数据库存放在assert目录下，不会自动生成id
 	 */
-	private void copydb() {
+	private void copydb(String dbname) {
 		//从assert目录中将数据库读取出来
-		File file = new File(getFilesDir(), "address.db");
+		File file = new File(getFilesDir(), dbname);
 		if (!file.exists()) {
 			//1.获取assets的管理者
 			AssetManager am = getAssets();
@@ -162,7 +163,7 @@ public class SpalshActivity extends Activity {
 			FileOutputStream out =null;
 			try {
 				//2.读取数据库资源
-				in = am.open("address.db");
+				in = am.open(dbname);
 				//getCacheDir():获取缓存的路径；getFilesDir():获取文件的存储路径
 				//写入流
 				out = new FileOutputStream(file);

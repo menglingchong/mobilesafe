@@ -30,9 +30,8 @@ public class MD5Util {
 				String hexString = Integer.toHexString(result);
 				if (hexString.length()<2) {
 					sb.append("0");
-				} else {
-					sb.append(hexString);
-				}
+				} 
+				sb.append(hexString);
 			}
 			return sb.toString();
 		} catch (NoSuchAlgorithmException e) {
@@ -41,5 +40,4 @@ public class MD5Util {
 		}
 		return null;
 	}
-	
 }

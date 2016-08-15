@@ -67,9 +67,17 @@ public class HomeActivity extends Activity {
 					Intent intent2 = new Intent(HomeActivity.this, SoftManagerActivity.class);
 					startActivity(intent2);
 					break;
-				case 3:
+				case 3://进程管理
 					Intent intent3 = new Intent(HomeActivity.this,TaskManagerActivity.class);
 					startActivity(intent3);
+					break;
+				case 4://流量统计
+					Intent intent4 = new Intent(HomeActivity.this, TrafficActivity.class);
+					startActivity(intent4);
+					break;
+				case 5://手机杀毒
+					Intent intent5 = new Intent(HomeActivity.this, AntiVirusActivity.class);
+					startActivity(intent5);
 					break;
 				case 7://高级工具
 					Intent intent7 = new Intent(getApplicationContext(), AToolsActivity.class);
