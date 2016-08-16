@@ -41,7 +41,7 @@
             android:layout_margin="10dp"
             />
         <TextView 
-            android:id="@+id/iv_antivirus_text"
+            android:id="@+id/tv_antivirus_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="正在扫描。。。"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_antivirus_antiimage"
-            android:layout_below="@id/iv_antivirus_text" 
+            android:layout_below="@id/tv_antivirus_text" 
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
             android:progressDrawable="@drawable/progressbar_antivirus_bg"

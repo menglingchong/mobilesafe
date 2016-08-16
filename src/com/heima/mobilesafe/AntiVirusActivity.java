@@ -32,7 +32,7 @@ import android.widget.TextView;
 public class AntiVirusActivity extends Activity {
 
 	private ImageView iv_antivirus_scanner;
-	private TextView iv_antivirus_text;
+	private TextView tv_antivirus_text;
 	private ProgressBar pb_antivirus_progress;
 	private LinearLayout ll_antivirus_appname;
 	private List<String> list;
@@ -42,7 +42,7 @@ public class AntiVirusActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_antivirus);
 		iv_antivirus_scanner = (ImageView) findViewById(R.id.iv_antivirus_scanner);
-		iv_antivirus_text = (TextView) findViewById(R.id.iv_antivirus_text);
+		tv_antivirus_text = (TextView) findViewById(R.id.tv_antivirus_text);
 		pb_antivirus_progress = (ProgressBar) findViewById(R.id.pb_antivirus_progress);
 		ll_antivirus_appname = (LinearLayout) findViewById(R.id.ll_antivirus_appname);
 		
@@ -72,7 +72,7 @@ public class AntiVirusActivity extends Activity {
 		list = new ArrayList<String>();
 		//1.获取包的管理者
 		final PackageManager pm = getPackageManager();
-		iv_antivirus_text.setText("正在初始化杀毒引擎。。。");
+		tv_antivirus_text.setText("正在初始化杀毒引擎。。。");
 		
 		new Thread(new Runnable() {
 		 
@@ -97,7 +97,7 @@ public class AntiVirusActivity extends Activity {
 						
 						@Override
 						public void run() {
-							iv_antivirus_text.setText("正在扫描："+appname);
+							tv_antivirus_text.setText("正在扫描："+appname);
 							
 							//7.获取应用程序的签名，并进行MD5加密
 							//获取应用程序的签名信息，获取签名数组
@@ -135,7 +135,7 @@ public class AntiVirusActivity extends Activity {
 					public void run() {
 						if (list.size()>0) {
 							//有病毒
-							iv_antivirus_text.setText("扫描完成，没有"+list.size()+"个发现病毒！");
+							tv_antivirus_text.setText("扫描完成，没有"+list.size()+"个发现病毒！");
 							//卸载病毒应用
 							AlertDialog.Builder builder = new Builder(AntiVirusActivity.this);
 							builder.setTitle("提醒！发现"+list.size()+"个病毒");
@@ -153,16 +153,15 @@ public class AntiVirusActivity extends Activity {
 										intent.setData(Uri.parse("package:"+packagename));
 										startActivity(intent);
 									}
-									iv_antivirus_text.setText("病毒卸载完成，现在无病毒！");
+									tv_antivirus_text.setText("病毒卸载完成，现在无病毒！");
 								}
 							});
 							builder.setNegativeButton("取消", null);
 							builder.show();
 						}else {
 							//没有病毒
-							iv_antivirus_text.setText("扫描完成，没有发现病毒！");
+							tv_antivirus_text.setText("扫描完成，没有发现病毒！");
 						}
-						
 						iv_antivirus_scanner.clearAnimation();//移出动画
 					}
 				});
